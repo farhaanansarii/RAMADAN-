@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Noor-e-Qadr | Shab-e-Qadr Nights</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+
+  <style>
+    :root{
+      --night-900:#060b1a;
+      --night-800:#0b1430;
+      --night-700:#0e1b3e;
+      --gold:#d6b35a;
+      --gold-2:#f4d27a;
+      --white:#ffffff;
+      --muted:rgba(255,255,255,.75);
+      --card: rgba(255,255,255,.06);
+      --cardBorder: rgba(214,179,90,.22);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body{
+      background: radial-gradient(1200px 600px at 15% 0%, rgba(214,179,90,.12), transparent 55%),
+                  radial-gradient(1000px 600px at 85% 10%, rgba(120,168,255,.12), transparent 55%),
+                  linear-gradient(180deg, var(--night-900), var(--night-800) 35%, var(--night-900));
+      color: var(--white);
+      overflow-x: hidden;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .stars::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.7) 40%, transparent 45%),
+        radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,.55) 40%, transparent 45%),
+        radial-gradient(1px 1px at 70% 35%, rgba(255,255,255,.6) 40%, transparent 45%),
+        radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,.5) 40%, transparent 45%),
+        radial-gradient(1px 1px at 25% 85%, rgba(255,255,255,.4) 40%, transparent 45%),
+        radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,.45) 40%, transparent 45%);
+      opacity:.5;
+      pointer-events:none;
+    }
+
+    /* NAV */
+    .nav-glass{
+      background: rgba(6,11,26,.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(214,179,90,.18);
+    }
+    .search-pill{
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      color: #fff;
+
+    }
+    .search-pill::placeholder{ color: rgba(255,255,255,.65); }
+    .search-pill:focus{ background: rgba(255,255,255,.12); border-color: rgba(214,179,90,.5); box-shadow: none; color:#fff; outline:none; }
+
+    .lang-btn{
+      width:40px; height:40px;
+      border-radius:9999px;
+      display:grid; place-items:center;
+      border:1px solid rgba(214,179,90,.35);
+      background:rgba(255,255,255,.06);
+      transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
+      user-select:none;
+      cursor:pointer;
+      color:#fff;
+      font-size:.85rem; font-weight:600;
+    }
+    .lang-btn:hover{ transform:translateY(-1px); background:rgba(214,179,90,.14); box-shadow:0 8px 18px rgba(0,0,0,.35); }
+    .lang-btn.active{
+      background:linear-gradient(135deg,rgba(214,179,90,.35),rgba(244,210,122,.15));
+      box-shadow:0 10px 22px rgba(214,179,90,.12);
+      border-color:rgba(244,210,122,.6);
+    }
+
+    /* HERO */
+    .hero{
+      background:
+        radial-gradient(1000px 500px at 15% 30%, rgba(214,179,90,.22), transparent 60%),
+        radial-gradient(900px 500px at 85% 35%, rgba(80,140,255,.24), transparent 60%),
+        linear-gradient(135deg, #061133, #0b1b4d 45%, #060b1a);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      position:relative;
+      overflow:hidden;
+    }
+    .glow-orb{
+      position:absolute; width:420px; height:420px;
+      border-radius:9999px; filter:blur(55px);
+      opacity:.35; pointer-events:none;
+      animation:floaty 10s ease-in-out infinite;
+    }
+    .glow-left{ left:-120px; top:-120px; background:rgba(214,179,90,.7); }
+    .glow-right{ right:-120px; bottom:-140px; background:rgba(90,160,255,.7); animation-delay:-3s; }
+    @keyframes floaty{
+      0%,100%{ transform:translate3d(0,0,0) scale(1); }
+      50%{ transform:translate3d(0,18px,0) scale(1.03); }
+    }
+
+    /* Hero typography */
+    .hero-badge{
+      display:inline-flex; align-items:center; gap:6px;
+      background:rgba(214,179,90,.18); border:1px solid rgba(214,179,90,.35);
+      color:var(--gold-2); border-radius:9999px;
+      padding:6px 16px; font-size:.82rem; font-weight:600;
+    }
+    .hero-title{
+      font-size:clamp(2rem,5vw,3rem);
+      font-weight:800; line-height:1.15;
+      letter-spacing:-.02em;
+      margin:0;
+    }
+    .hero-subtitle{ font-size:1.1rem; color:var(--muted); margin-top:.75rem; }
+
+    .hero-img-placeholder{
+      width:100%;
+      aspect-ratio:4/3;
+      border-radius:20px;
+      
+      background:rgba(255,255,255,.04);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      color:rgba(214,179,90,.75);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-img-placeholder::before{
+      content:"";
+      position:absolute; inset:0;
+      background:radial-gradient(circle at 50% 50%, rgba(214,179,90,.07), transparent 70%);
+    }
+    .hero-img-placeholder i{ font-size:3rem; opacity:.65; }
+
+    .btn-primary-gold{
+      display:inline-flex; align-items:center; gap:6px;
+      background:linear-gradient(135deg,rgba(244,210,122,.95),rgba(214,179,90,.95));
+      border:none; color:#0b1430;
+      padding:10px 24px; border-radius:9999px;
+      font-weight:700; font-size:.92rem;
+      text-decoration:none;
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+    .btn-primary-gold:hover{ transform:translateY(-2px); box-shadow:0 12px 24px rgba(0,0,0,.3); color:#0b1430; }
+
+    .btn-outline-light-custom{
+      display:inline-flex; align-items:center; gap:6px;
+      background:transparent;
+      border:1px solid rgba(255,255,255,.25); color:#fff;
+      padding:10px 24px; border-radius:9999px;
+      font-weight:600; font-size:.92rem;
+      text-decoration:none;
+      transition:background .2s ease;
+    }
+    .btn-outline-light-custom:hover{ background:rgba(255,255,255,.08); color:#fff; }
+
+    /* ── SECTION HEADING ── */
+    .section-heading-wrap{
+      position:relative;
+      display:inline-block;
+    }
+    .section-heading{
+      font-size:clamp(1.6rem,3.5vw,2.4rem);
+      font-weight:800;
+      letter-spacing:-.025em;
+      line-height:1.1;
+      background:linear-gradient(135deg, var(--white) 20%, var(--gold-2) 55%, var(--gold) 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      margin:0;
+    }
+    .section-heading-underline{
+      display:block;
+      height:3px;
+      width:70%;
+      margin-top:6px;
+      border-radius:9999px;
+      background:linear-gradient(90deg, var(--gold), var(--gold-2), transparent);
+    }
+    .section-subtitle{ color:var(--muted); margin-top:8px; font-size:.9rem; }
+
+    /* ACCORDION CARDS */
+    .qadr-card{
+      background:var(--card);
+      border:1px solid var(--cardBorder);
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:0 10px 24px rgba(0,0,0,.26);
+      transition:border-color .22s ease, box-shadow .22s ease;
+    }
+    .qadr-card:hover{ border-color:rgba(244,210,122,.4); box-shadow:0 16px 38px rgba(0,0,0,.38); }
+
+    .qadr-card.golden{
+      background:linear-gradient(135deg,rgba(214,179,90,.16),rgba(244,210,122,.07));
+      border-color:rgba(244,210,122,.6);
+      box-shadow:0 0 26px rgba(214,179,90,.2),0 12px 28px rgba(0,0,0,.28);
+    }
+    .qadr-card.golden:hover{ border-color:rgba(244,210,122,.88); box-shadow:0 0 38px rgba(214,179,90,.32),0 18px 44px rgba(0,0,0,.38); }
+    .qadr-card.golden .card-header-row{ background:rgba(214,179,90,.10); }
+
+    .golden-crown{ margin-right:5px; animation:crownPulse 2.2s ease-in-out infinite; display:inline-block; }
+    @keyframes crownPulse{
+      0%,100%{ opacity:1; transform:scale(1) rotate(0deg); }
+      50%{ opacity:.75; transform:scale(1.18) rotate(-4deg); }
+    }
+
+    .card-header-row{
+      display:flex; align-items:center;
+      justify-content:space-between;
+      padding:16px 18px;
+      cursor:pointer; user-select:none;
+      transition:background .2s ease;
+      gap:12px;
+    }
+    .card-header-row:hover{ background:rgba(255,255,255,.04); }
+
+    .card-night-badge{
+      min-width:40px; height:40px;
+      border-radius:50%;
+      background:rgba(214,179,90,.18);
+      border:1px solid rgba(214,179,90,.38);
+      color:var(--gold-2);
+      display:flex; align-items:center; justify-content:center;
+      font-size:.78rem; font-weight:700; flex-shrink:0;
+    }
+    .golden .card-night-badge{
+      background:linear-gradient(135deg,rgba(214,179,90,.5),rgba(244,210,122,.22));
+      border-color:rgba(244,210,122,.8);
+      box-shadow:0 0 12px rgba(214,179,90,.3);
+    }
+
+    .card-title-text{ font-weight:600; font-size:.97rem; line-height:1.35; }
+    .golden .card-title-text{ color:var(--gold-2); }
+
+    .chevron-icon{
+      flex-shrink:0; color:rgba(255,255,255,.45); font-size:1rem;
+      transition:transform .28s ease;
+    }
+    .card-open .chevron-icon{ transform:rotate(180deg); }
+
+    .card-body-content{
+      max-height:0; overflow:hidden;
+      transition:max-height .38s cubic-bezier(.4,0,.2,1);
+    }
+    .card-open .card-body-content{ max-height:1400px; }
+    .card-body-inner{
+      padding:16px 18px 18px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .golden .card-body-inner{ border-top-color:rgba(214,179,90,.22); }
+
+    mark.search-hit{
+      background:rgba(244,210,122,.22);
+      color:#fff; padding:0 .2em;
+      border-radius:.35em;
+      border:1px solid rgba(244,210,122,.35);
+    }
+    .no-results{
+      background:rgba(255,255,255,.06);
+      border:1px dashed rgba(244,210,122,.35);
+      border-radius:14px;
+    }
+    .badge-gold{ background:rgba(214,179,90,.18); border:1px solid rgba(214,179,90,.35); color:var(--gold-2); }
+    .gold-text{ color:var(--gold-2); }
+    .muted{ color:var(--muted); }
+    .top-pad{ padding-top:92px; }
+
+    @media(max-width:767px){
+      .top-pad{ padding-top:140px; }
+    }
+
+    /* GAP UTILITY */
+    .gap-2{ gap:.5rem; }
+    .gap-3{ gap:1rem; }
+
+    /* TIMER */
+    #ramadanTimer{
+      background:linear-gradient(135deg,rgba(214,179,90,.10),rgba(90,140,255,.08)),rgba(255,255,255,.04);
+      border:1px solid rgba(214,179,90,.28);
+      border-radius:22px;
+      padding:32px 24px;
+      position:relative;
+      overflow:hidden;
+    }
+    #ramadanTimer::before{
+      content:""; position:absolute; inset:0;
+      background:radial-gradient(700px 300px at 50% 0%,rgba(214,179,90,.07),transparent 60%);
+      pointer-events:none;
+    }
+
+    .timer-unit{
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      padding:16px 12px 12px;
+      min-width:74px;
+      text-align:center;
+      transition:border-color .2s;
+    }
+    .timer-unit:hover{ border-color:rgba(214,179,90,.4); }
+    .timer-num{
+      font-size:2.2rem; font-weight:800; line-height:1;
+      background:linear-gradient(135deg,var(--gold-2),#fff 70%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; font-variant-numeric:tabular-nums;
+    }
+    .timer-label{
+      font-size:.68rem; text-transform:uppercase;
+      letter-spacing:.1em; color:rgba(255,255,255,.5);
+      margin-top:5px;
+    }
+    .timer-colon{
+      font-size:1.8rem; font-weight:700;
+      color:rgba(214,179,90,.5); padding:0 2px;
+      animation:blinkColon 1s step-end infinite;
+    }
+    @keyframes blinkColon{ 0%,100%{opacity:1} 50%{opacity:.15} }
+
+    .timer-status-pill{
+      display:inline-flex; align-items:center; gap:7px;
+      padding:5px 14px; border-radius:9999px;
+      font-size:.8rem; font-weight:600; border:1px solid;
+    }
+    .status-active{ background:rgba(80,210,120,.12); border-color:rgba(80,210,120,.4); color:rgba(130,240,160,1); }
+    .status-upcoming{ background:rgba(214,179,90,.12); border-color:rgba(214,179,90,.4); color:var(--gold-2); }
+    .status-ended{ background:rgba(120,120,120,.12); border-color:rgba(180,180,180,.4); color:rgba(200,200,200,1); }
+    .status-dot{
+      width:8px; height:8px; border-radius:50%;
+      animation:dotPulse 1.5s ease-in-out infinite;
+    }
+    .status-active .status-dot{ background:rgba(100,230,140,1); }
+    .status-upcoming .status-dot{ background:var(--gold-2); }
+    .status-ended .status-dot{ background:rgba(200,200,200,1); animation:none; }
+    @keyframes dotPulse{ 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(1.45)} }
+
+    .timer-progress-wrap{ height:5px; background:rgba(255,255,255,.08); border-radius:9999px; overflow:hidden; }
+    .timer-progress-bar{
+      height:100%; border-radius:9999px;
+      background:linear-gradient(90deg,var(--gold),var(--gold-2));
+      transition:width .7s ease;
+    }
+
+    /* FOOTER */
+    footer .footer-inner{
+      border-top:1px solid rgba(255,255,255,.10);
+      padding-top:1.5rem;
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:.75rem;
+      color:var(--muted);
+      font-size:.82rem;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:767px){
+      .hero-title{ font-size:1.85rem; }
+      .d-none-mobile{ display:none !important; }
+    }
+    @media(min-width:768px){
+      .d-none-desktop{ display:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar nav-glass fixed-top">
+    <div class="container-fluid px-3 px-md-4">
+      <div class="d-flex align-items-center gap-2">
+        <span style="font-size:1.1rem;font-weight:700;letter-spacing:.01em;">
+          <span class="gold-text">Noor</span>-e-Qadr
+        </span>
+      </div>
+
+      <div class="flex-grow-1 d-none d-md-flex justify-content-center px-3">
+        <div class="w-100" style="max-width:540px;">
+          <div class="input-group">
+            <span class="input-group-text search-pill border-0" style="border-radius:9999px 0 0 9999px;"><i class="bi bi-search"></i></span>
+            <input id="searchInput" type="text" class="form-control search-pill border-0" style="border-radius:0 9999px 9999px 0;" placeholder="Search nights, duas, namaz..." aria-label="Search"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <button class="lang-btn active" data-lang="hinglish">Hi</button>
+        <button class="lang-btn" data-lang="hindi">ह</button>
+        <button class="lang-btn" data-lang="english">En</button>
+      </div>
+    </div>
+    <div class="container-fluid d-md-none px-3 pb-3">
+      <div class="input-group">
+        <span class="input-group-text search-pill border-0" style="border-radius:9999px 0 0 9999px;"><i class="bi bi-search"></i></span>
+        <input id="searchInputMobile" type="text" class="form-control search-pill border-0" style="border-radius:0 9999px 9999px 0;" placeholder="Search nights, duas, namaz..."/>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero stars top-pad">
+    <div class="glow-orb glow-left"></div>
+    <div class="glow-orb glow-right"></div>
+
+    <div class="container px-3 px-md-4 py-5">
+      <div class="row align-items-center g-4">
+        <div class="col-12 col-lg-7">
+          <div class="mb-3">
+            <span id="heroBadge" class="hero-badge">
+              <i class="bi bi-moon-stars" style="font-size:14px;"></i>
+              Blessed Nights
+            </span>
+          </div>
+          <h1 id="heroTitle" class="hero-title">Shab-e-Qadr Mubarak</h1>
+          <p id="heroSubtitle" class="hero-subtitle">The most blessed night of Ramadan</p>
+
+          <div class="d-flex flex-wrap gap-3 mt-4">
+            <a id="exploreBtn" href="#nights" class="btn-primary-gold">
+              <span id="exploreBtnText">Explore Nights</span>
+              <i class="bi bi-arrow-down-short" style="font-size:16px;"></i>
+            </a>
+            <a href="#nights" class="btn-outline-light-custom">
+              <span id="secondaryBtnText">Start Searching</span>
+              <i class="bi bi-search" style="font-size:14px;"></i>
+            </a>
+          </div>
+          <p id="heroHint" class="muted mt-4" style="font-size:.82rem;">Tip: Try searching "namaz", "dua", "dhikr", "quran", "tahajjud".</p>
+        </div>
+
+        <!-- IMAGE PLACEHOLDER -->
+        <div class="col-12 col-lg-5">
+          <div class="hero-img-placeholder">
+            <img style="width: 600px; height: 500px; object-fit: cover;" src="hero.png">
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NIGHTS SECTION -->
+  <main id="nights" class="container px-3 px-md-4 py-5">
+    <div class="d-flex flex-column flex-md-row align-items-start align-items-md-end justify-content-between gap-2 mb-4">
+      <div>
+        <div class="section-heading-wrap">
+          <h2 id="sectionTitle" class="section-heading">Shab-e-Qadr Nights</h2>
+          <span class="section-heading-underline"></span>
+        </div>
+        <p id="sectionSubtitle" class="section-subtitle">Explore worship ideas for the odd nights of Ramadan</p>
+      </div>
+      <div class="muted" style="font-size:.82rem;"><span id="resultsCount">Showing 5 of 5</span></div>
+    </div>
+
+    <div id="noResults" class="no-results p-4 d-none">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-exclamation-circle gold-text"></i>
+        <div id="noResultsText" class="fw-semibold">No results found</div>
+      </div>
+      <div id="noResultsHint" class="muted mt-1" style="font-size:.82rem;">Try keywords: "dua", "namaz", "quran".</div>
+    </div>
+
+    <div id="cardsGrid" class="d-flex flex-column gap-3"></div>
+  </main>
+
+  <!-- RAMADAN TIMER -->
+  <section class="container px-3 px-md-4 pb-5">
+    <div id="ramadanTimer">
+      <div class="row align-items-center g-4">
+        <div class="col-12 col-md-7">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <i class="bi bi-hourglass-split gold-text"></i>
+            <h3 id="timerHeading" class="m-0 fw-bold" style="font-size:1.25rem;">Ramadan Timer</h3>
+          </div>
+          <p id="timerDesc" class="muted mb-3" style="font-size:.85rem;">Ramadan 2027 ke khatam hone tak ka countdown</p>
+
+          <div class="mb-4">
+            <span id="timerStatus" class="timer-status-pill status-upcoming">
+              <span class="status-dot"></span>
+              <span id="timerStatusText">Ramadan 2027 Aane Wala Hai</span>
+            </span>
+          </div>
+
+          <div class="d-flex align-items-center flex-wrap gap-2">
+            <div class="timer-unit"><div id="t-days" class="timer-num">00</div><div id="t-days-lbl" class="timer-label">Din</div></div>
+            <div class="timer-colon d-none d-sm-block">:</div>
+            <div class="timer-unit"><div id="t-hours" class="timer-num">00</div><div id="t-hours-lbl" class="timer-label">Hours</div></div>
+            <div class="timer-colon d-none d-sm-block">:</div>
+            <div class="timer-unit"><div id="t-mins" class="timer-num">00</div><div id="t-mins-lbl" class="timer-label">Mins</div></div>
+            <div class="timer-colon d-none d-sm-block">:</div>
+            <div class="timer-unit"><div id="t-secs" class="timer-num">00</div><div id="t-secs-lbl" class="timer-label">Secs</div></div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-5">
+          <div class="d-flex justify-content-between mb-1" style="font-size:.82rem;">
+            <span class="muted" id="timerProgressLabel">Ramadan Progress</span>
+            <span class="gold-text fw-semibold" id="timerProgressPct">0%</span>
+          </div>
+          <div class="timer-progress-wrap mb-4">
+            <div id="timerProgressBar" class="timer-progress-bar" style="width:0%"></div>
+          </div>
+
+          <div class="d-flex flex-column gap-2" style="font-size:.82rem;">
+            <div class="d-flex justify-content-between">
+              <span class="muted" id="timerStartLbl">Shuru</span>
+              <span id="timerStartDate" class="fw-semibold">—</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="muted" id="timerEndLbl">Khatam</span>
+              <span id="timerEndDate" class="fw-semibold">—</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="muted" id="timerTodayLbl">Aaj</span>
+              <span id="timerToday" class="fw-semibold">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="container px-3 px-md-4 pb-5">
+    <div class="footer-inner">
+      <div id="footerLeft">Noor-e-Qadr • A simple interactive Shab-e-Qadr guide</div>
+      <div id="footerRight">Made by farhan</div>
+    </div>
+  </footer>
+
+  <script>
+    const i18n = {
+      hinglish:{
+        ui:{
+          heroBadge:"Blessed Nights",heroTitle:"Shab-e-Qadr Mubarak",heroSubtitle:"Ramadan ki sabse barkat wali raat",
+          exploreBtnText:"Explore Nights",secondaryBtnText:"Start Searching",
+          heroHint:'Tip: Search try karo "namaz", "dua", "dhikr", "quran", "tahajjud".',
+          sectionTitle:"Shab-e-Qadr Nights",sectionSubtitle:"Ramadan ki odd nights ke liye ibadat ideas",
+          noResults:"No results found",noResultsHint:'Try keywords: "dua", "namaz", "quran", "tahajjud".',
+          timerHeading:"Ramadan Timer",timerDesc:"Ramadan 2027 ke khatam hone tak ka countdown",
+          timerStatusActive:"Ramadan Chal Raha Hai",timerStatusUpcoming:"Ramadan 2027 Aane Wala Hai",timerStatusEnded:"Ramadan Khatam Ho Gaya",
+          timerProgressLabel:"Ramadan Progress",timerStartLbl:"Shuru",timerEndLbl:"Khatam",timerTodayLbl:"Aaj",
+          daysLbl:"Din",hoursLbl:"Hours",minsLbl:"Mins",secsLbl:"Secs",nightLabel:"Raat"
+        },
+        cards:[
+          {night:"21",title:"21vi Raat • Namaz (Detailed)",keywords:["namaz","salah","prayer","nawafil","nafl","rakat","qadr","21","witr","istighfar","tawba"],
+           content:["Niyat: Shab-e-Qadr ki talash aur Allah ki raza ke liye ibadat.","Maghrib ke baad: Wuzu fresh rakho, 2 rakat Nafl (Shukr) padh sakte ho.","Isha + Taraweeh: Jamaat ho to best. Taraweeh ke baad thoda aaram, phir ibadat continue.","Nafl Namaz (Suggested):","1) 2 rakat Nafl (Salatul Taubah): Har rakat me Al-Fatiha ke baad koi surah. Salam ke baad istighfar.","2) 4 rakat Nafl (2+2): Har 2 rakat ke baad salam. Dua aur dhikr.","3) 8 rakat Tahajjud (2-2 karke): Best time: last third of night.","Witr: 3 rakat Witr (Isha ke saath ya Tahajjud ke baad).","After Salah: Lambi dua, maghfirat, hidayat, rizq, sehat, aur ummat ke liye dua.","Dhikr: SubhanAllah, Alhamdulillah, Allahu Akbar, La ilaha illallah, Astaghfirullah.","Best Dua (Laylatul Qadr): Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'anni.","Note: Quality > quantity. Khushu (focus) ke saath padhna sabse important."]},
+          {night:"23",title:"23vi Raat • Ibadat Importance",keywords:["ibadat","worship","23","qadr","ramadan","fadl","barkat","namaz"],
+           content:["Is raat me ibadat ka ajr bahut zyada hota hai—niyat ko pure rakho.","Apna dil saaf karo: gussa, ghibat aur negativity se bachho.","Nafl namaz, Qur'an, dhikr aur sadaqah ka mix routine banao.","Family ke saath short reminder aur dua time bhi rakh sakte ho."]},
+          {night:"25",title:"25vi Raat • Dhikr & Istighfar",keywords:["dhikr","zikr","istighfar","tasbeeh","25","dua","qadr"],
+           content:["Dhikr se dil roshan hota hai: SubhanAllah, Alhamdulillah, Allahu Akbar.","Istighfar: Astaghfirullah (100+ times), dil se tauba.","Salawat: Durood-e-Ibrahim jitna ho sake.","Short breaks me bhi dhikr chalta rahe—walking, sitting, anywhere."]},
+          {night:"27",title:"27vi Raat • Qur'an, Tahajjud & Dua ✨",keywords:["quran","tilawat","tahajjud","27","dua","qadr","laylatul qadr"],
+           content:["Tilawat: Surah Al-Qadr, Surah Yaseen, Surah Rahman—jo aata ho.","Tahajjud: 2-2 rakat karke, lambi dua with tears.","Dua list banao: deen, duniya, parents, family, rizq, health, akhirah.","Laylatul Qadr dua: Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'anni."]},
+          {night:"29",title:"29vi Raat • Dua & Closing Moments",keywords:["dua","29","qadr","forgiveness","maghfirat","ramadan","closing"],
+           content:["Ramadan ke last phase me dua ko maximum karo—dil khol ke maango.","Forgiveness: apne gunah yaad karke sincere tauba.","Sadaqah (as possible) aur kisi ko forgive karna bhi ibadat hai.","Allah se istiqamah (consistency) ki dua: Ramadan ke baad bhi."]}
+        ]
+      },
+      hindi:{
+        ui:{
+          heroBadge:"बरकत वाली रातें",heroTitle:"शब-ए-क़द्र मुबारक",heroSubtitle:"रमज़ान की सबसे बरकत वाली रात",
+          exploreBtnText:"रातें देखें",secondaryBtnText:"खोज शुरू करें",
+          heroHint:'टिप: "नमाज़", "दुआ", "ज़िक्र", "क़ुरआन", "तहज्जुद" खोजकर देखें।',
+          sectionTitle:"शब-ए-क़द्र की रातें",sectionSubtitle:"रमज़ान की विषम रातों के लिए इबादत के सुझाव",
+          noResults:"कोई परिणाम नहीं मिला",noResultsHint:'कीवर्ड आज़माएँ: "दुआ", "नमाज़", "क़ुरआन"।',
+          timerHeading:"रमज़ान टाइमर",timerDesc:"रमज़ान 2027 समाप्त होने तक की उलटी गिनती",
+          timerStatusActive:"रमज़ान जारी है",timerStatusUpcoming:"रमज़ान 2027 आने वाला है",timerStatusEnded:"रमज़ान समाप्त हो गया",
+          timerProgressLabel:"रमज़ान प्रगति",timerStartLbl:"शुरुआत",timerEndLbl:"समाप्ति",timerTodayLbl:"आज",
+          daysLbl:"दिन",hoursLbl:"घंटे",minsLbl:"मिनट",secsLbl:"सेकंड",nightLabel:"रात"
+        },
+        cards:[
+          {night:"21",title:"21वीं रात • नमाज़ (विस्तृत)",keywords:["नमाज़","सला","प्रार्थना","नफ़्ल","रकअत","क़द्र","21","वित्र","इस्तिग़फ़ार","तौबा","दुआ"],
+           content:["नियत: शब-ए-क़द्र की तलाश और अल्लाह की रज़ा के लिए इबादत।","मगरिब के बाद: वुज़ू ताज़ा रखें, 2 रकअत नफ़्ल (शुक्र) पढ़ सकते हैं।","इशा + तरावीह: जमाअत हो तो बेहतर।","नफ़्ल नमाज़ (सुझाव): 2+2+8 रकअत तहज्जुद।","वित्र: 3 रकअत वित्र।","नमाज़ के बाद: लंबी दुआ—मग़फिरत, हिदायत, रिज़्क, सेहत।","ज़िक्र: सुब्हानअल्लाह, अल्हम्दुलिल्लाह, अल्लाहु अकबर।","दुआ: अल्लाहुम्मा इन्नका 'अफ़ुव्वुन तुहिब्बुल 'अफ़्व फ़ा'फ़ु 'अन्नी।"]},
+          {night:"23",title:"23वीं रात • इबादत की अहमियत",keywords:["इबादत","23","क़द्र","रमज़ान","बरकत","नमाज़"],
+           content:["इस रात में इबादत का अज्र बहुत बढ़ जाता है—नियत साफ़ रखें।","दिल साफ़ करें: ग़ुस्सा, ग़ीबत और नकारात्मकता से बचें।","नफ़्ल नमाज़, क़ुरआन, ज़िक्र और सदक़ा का संतुलित रूटीन।","परिवार के साथ दुआ का समय रखें।"]},
+          {night:"25",title:"25वीं रात • ज़िक्र और इस्तिग़फ़ार",keywords:["ज़िक्र","इस्तिग़फ़ार","तस्बीह","25","दुआ","क़द्र"],
+           content:["ज़िक्र से दिल रोशन होता है: सुब्हानअल्लाह, अल्हम्दुलिल्लाह, अल्लाहु अकबर।","इस्तिग़फ़ार: अस्तग़फ़िरुल्लाह (100+ बार), दिल से तौबा।","सलावत: दुरूद-ए-इब्राहीम जितना हो सके।","छोटे ब्रेक में भी ज़िक्र जारी रखें।"]},
+          {night:"27",title:"27वीं रात • क़ुरआन, तहज्जुद और दुआ ✨",keywords:["क़ुरआन","तिलावत","तहज्जुद","27","दुआ","क़द्र","लैलतुल क़द्र"],
+           content:["तिलावत: सूरह अल-क़द्र, यासीन, रहमान—जो आता हो।","तहज्जुद: 2-2 रकअत करके, आँसुओं के साथ लंबी दुआ।","दुआ सूची: दीन, दुनिया, माता-पिता, परिवार, रिज़्क, सेहत, आख़िरत।","लैलतुल क़द्र की दुआ: अल्लाहुम्मा इन्नका 'अफ़ुव्वुन तुहिब्बुल 'अफ़्व फ़ा'फ़ु 'अन्नी।"]},
+          {night:"29",title:"29वीं रात • दुआ और समापन के लम्हे",keywords:["दुआ","29","क़द्र","मग़फिरत","रमज़ान","समापन"],
+           content:["रमज़ान के अंतिम दिनों में दुआ को अधिक करें—दिल खोलकर माँगें।","मग़फिरत: अपने गुनाह याद करके सच्ची तौबा।","सदक़ा और किसी को माफ़ करना भी इबादत है।","इस्तिक़ामत (निरंतरता) की दुआ: रमज़ान के बाद भी।"]}
+        ]
+      },
+      english:{
+        ui:{
+          heroBadge:"Blessed Nights",heroTitle:"Shab-e-Qadr Mubarak",heroSubtitle:"The most blessed night of Ramadan",
+          exploreBtnText:"Explore Nights",secondaryBtnText:"Start Searching",
+          heroHint:'Tip: Try searching "namaz", "dua", "dhikr", "quran", "tahajjud".',
+          sectionTitle:"Shab-e-Qadr Nights",sectionSubtitle:"Worship ideas for the odd nights of Ramadan",
+          noResults:"No results found",noResultsHint:'Try keywords: "dua", "namaz", "quran", "tahajjud".',
+          timerHeading:"Ramadan Timer",timerDesc:"Countdown to the end of Ramadan 2027",
+          timerStatusActive:"Ramadan is Active",timerStatusUpcoming:"Ramadan 2027 is Coming",timerStatusEnded:"Ramadan Has Ended",
+          timerProgressLabel:"Ramadan Progress",timerStartLbl:"Started",timerEndLbl:"Ends",timerTodayLbl:"Today",
+          daysLbl:"Days",hoursLbl:"Hours",minsLbl:"Mins",secsLbl:"Secs",nightLabel:"Night"
+        },
+        cards:[
+          {night:"21",title:"21st Night • Salah (Detailed)",keywords:["namaz","salah","prayer","nawafil","nafl","rakat","qadr","21","witr","istighfar","dua"],
+           content:["Intention (niyyah): Seek Laylatul Qadr and Allah's pleasure.","After Maghrib: Refresh wudu, pray 2 rak'ah nafl (gratitude).","Isha + Taraweeh: Prefer congregation. Rest briefly, then continue worship.","Nafl: 2 rak'ah Tawbah, 4 rak'ah (2+2), 8 rak'ah Tahajjud (last third of night).","Witr: 3 rak'ah after Isha or Tahajjud.","Long dua after salah: forgiveness, guidance, provision, health, ummah.","Dhikr: SubhanAllah, Alhamdulillah, Allahu Akbar, Astaghfirullah.","Best dua: Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'anni.","Note: Quality over quantity—pray with focus and humility."]},
+          {night:"23",title:"23rd Night • Importance of Worship",keywords:["worship","ibadah","23","qadr","ramadan","virtue","salah"],
+           content:["Reward is immense—keep intention pure and heart present.","Cleanse the heart: avoid anger, backbiting, and negativity.","Create a balanced routine: nafl salah, Qur'an, dhikr, and charity.","Share a reminder and dua time with family."]},
+          {night:"25",title:"25th Night • Dhikr & Seeking Forgiveness",keywords:["dhikr","zikr","istighfar","tasbeeh","25","dua","qadr"],
+           content:["Dhikr illuminates the heart: SubhanAllah, Alhamdulillah, Allahu Akbar.","Istighfar: Astaghfirullah (100+ times) with sincere repentance.","Send salawat upon the Prophet ﷺ as much as you can.","Keep dhikr going in small breaks—sitting, walking, anytime."]},
+          {night:"27",title:"27th Night • Qur'an, Tahajjud & Dua ✨",keywords:["quran","recitation","tilawah","tahajjud","27","dua","laylatul qadr"],
+           content:["Recite: Surah Al-Qadr, Yaseen, Ar-Rahman, or any portion.","Pray Tahajjud (2 by 2) with long, heartfelt dua.","Prepare a dua list: faith, family, parents, provision, health, akhirah.","Laylatul Qadr dua: Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'anni."]},
+          {night:"29",title:"29th Night • Dua & Closing Moments",keywords:["dua","29","qadr","forgiveness","ramadan","closing"],
+           content:["Maximize dua in these final moments—ask sincerely and repeatedly.","Seek forgiveness: return to Allah with humility.","Give charity; forgiving others is also worship.","Ask for istiqamah: consistency after Ramadan."]}
+        ]
+      }
+    };
+
+    let currentLang = "hinglish";
+    let currentQuery = "";
+
+    /* ── Ramadan 2027 dates (approx. Feb 7 – Mar 8, 2027) ── */
+    const RAMADAN_START = new Date("2027-02-07T00:00:00");
+    const RAMADAN_END   = new Date("2027-03-08T23:59:59");
+
+    function escapeHTML(s){ return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+    function highlight(t,q){
+      if(!q) return escapeHTML(t);
+      const s=q.trim().toLowerCase().replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+      return escapeHTML(t).replace(new RegExp(`(${s})`,"ig"),`<mark class="search-hit">$1</mark>`);
+    }
+    function cardSearchText(c){ return((c.title||"")+" "+(c.content||[]).join(" ")+" "+(c.keywords||[]).join(" ")).toLowerCase(); }
+    function pad2(n){ return String(n).padStart(2,"0"); }
+
+    function renderCards(){
+      const {cards} = i18n[currentLang];
+      const q = currentQuery.trim().toLowerCase();
+      const grid = document.getElementById("cardsGrid");
+      grid.innerHTML = "";
+      let shown = 0;
+
+      cards.forEach(card => {
+        if(q && !cardSearchText(card).includes(q)) return;
+        shown++;
+        const golden = card.night === "27";
+        const gc = golden ? " golden" : "";
+        const crown = golden ? `<span class="golden-crown">👑</span>` : "";
+
+        const items = (card.content||[]).map(l => `<li style="margin-bottom:8px;font-size:.84rem;">${highlight(l,q)}</li>`).join("");
+        const tags = (card.keywords||[]).slice(0,6).map(k =>
+          `<span style="font-size:.72rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:9999px;padding:2px 10px;">${highlight(k,q)}</span>`
+        ).join("");
+
+        grid.insertAdjacentHTML("beforeend",`
+          <div class="qadr-card${gc}">
+            <div class="card-header-row" role="button" tabindex="0" aria-expanded="false"
+                 onclick="toggleCard(this)" onkeydown="if(event.key==='Enter'||event.key===' ')toggleCard(this)">
+              <div class="d-flex align-items-center gap-3 flex-grow-1" style="min-width:0;">
+                <div class="card-night-badge">${escapeHTML(card.night)}</div>
+                <div class="card-title-text">${crown}${highlight(card.title,q)}</div>
+              </div>
+              <i class="bi bi-chevron-down chevron-icon"></i>
+            </div>
+            <div class="card-body-content">
+              <div class="card-body-inner">
+                <ul style="margin:0;padding-left:1.2rem;margin-bottom:12px;">${items}</ul>
+                <div class="d-flex flex-wrap gap-2">${tags}</div>
+              </div>
+            </div>
+          </div>`);
+      });
+
+      document.getElementById("noResults").classList.toggle("d-none", shown > 0);
+      document.getElementById("resultsCount").textContent = `Showing ${shown} of ${cards.length}`;
+    }
+
+    function toggleCard(header){
+      const card = header.closest(".qadr-card");
+      const wasOpen = card.classList.contains("card-open");
+      document.querySelectorAll(".qadr-card.card-open").forEach(c => {
+        c.classList.remove("card-open");
+        c.querySelector(".card-header-row").setAttribute("aria-expanded","false");
+      });
+      if(!wasOpen){
+        card.classList.add("card-open");
+        header.setAttribute("aria-expanded","true");
+      }
+    }
+
+    function applyUI(){
+      const ui = i18n[currentLang].ui;
+      const map = {
+        heroBadge:ui.heroBadge, heroTitle:ui.heroTitle, heroSubtitle:ui.heroSubtitle,
+        exploreBtnText:ui.exploreBtnText, secondaryBtnText:ui.secondaryBtnText, heroHint:ui.heroHint,
+        sectionTitle:ui.sectionTitle, sectionSubtitle:ui.sectionSubtitle,
+        noResultsText:ui.noResults, noResultsHint:ui.noResultsHint,
+        timerHeading:ui.timerHeading, timerDesc:ui.timerDesc,
+        timerProgressLabel:ui.timerProgressLabel,
+        timerStartLbl:ui.timerStartLbl, timerEndLbl:ui.timerEndLbl, timerTodayLbl:ui.timerTodayLbl,
+        "t-days-lbl":ui.daysLbl, "t-hours-lbl":ui.hoursLbl, "t-mins-lbl":ui.minsLbl, "t-secs-lbl":ui.secsLbl
+      };
+      Object.entries(map).forEach(([id,val])=>{ const el=document.getElementById(id); if(el) el.textContent=val; });
+
+      document.getElementById("footerLeft").textContent =
+        currentLang==="hindi"?"Noor-e-Qadr • शब-ए-क़द्र के लिए एक सरल इंटरैक्टिव गाइड":
+        currentLang==="english"?"Noor-e-Qadr • A simple interactive Shab-e-Qadr guide":
+        "Noor-e-Qadr • Shab-e-Qadr ka simple interactive guide";
+      document.getElementById("footerRight").textContent =
+        currentLang==="hindi"?"Bootstrap CDN के साथ बनाया":
+        currentLang==="english"?"Built with Bootstrap CDN":
+        "Bootstrap CDN se built";
+
+      refreshTimerStatus();
+    }
+
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.addEventListener("click",()=>{
+        document.querySelectorAll(".lang-btn").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        currentLang = btn.dataset.lang;
+        applyUI(); renderCards();
+      });
+    });
+
+    function setQuery(q){ currentQuery=q||""; renderCards(); }
+    function syncInputs(src){
+      const v=src.value;
+      const other=document.getElementById(src.id==="searchInput"?"searchInputMobile":"searchInput");
+      if(other) other.value=v;
+      setQuery(v);
+    }
+    document.getElementById("searchInput")?.addEventListener("input",e=>syncInputs(e.target));
+    document.getElementById("searchInputMobile")?.addEventListener("input",e=>syncInputs(e.target));
+
+    function formatDate(d){ return d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}); }
+
+    function refreshTimerStatus(){
+      const ui = i18n[currentLang].ui;
+      const now = new Date();
+      const pill = document.getElementById("timerStatus");
+      let statusClass, statusText;
+
+      if(now < RAMADAN_START){
+        statusClass = "status-upcoming";
+        statusText  = ui.timerStatusUpcoming;
+      } else if(now <= RAMADAN_END){
+        statusClass = "status-active";
+        statusText  = ui.timerStatusActive;
+      } else {
+        statusClass = "status-ended";
+        statusText  = ui.timerStatusEnded;
+      }
+
+      pill.className = "timer-status-pill " + statusClass;
+      let dot = pill.querySelector(".status-dot");
+      if(!dot){ dot=document.createElement("span"); dot.className="status-dot"; pill.prepend(dot); }
+      dot.className = "status-dot";
+      document.getElementById("timerStatusText").textContent = statusText;
+    }
+
+    function updateTimer(){
+      const now = new Date();
+      let target, diff;
+
+      if(now < RAMADAN_START){
+        /* Countdown to start */
+        target = RAMADAN_START;
+        diff   = Math.max(0, target - now);
+      } else if(now <= RAMADAN_END){
+        /* Countdown to end */
+        target = RAMADAN_END;
+        diff   = Math.max(0, target - now);
+      } else {
+        diff = 0;
+      }
+
+      const totalMs = RAMADAN_END - RAMADAN_START;
+      const elapsed = Math.max(0, Math.min(totalMs, now - RAMADAN_START));
+      const pct = now < RAMADAN_START ? 0 : Math.round((elapsed / totalMs) * 100);
+
+      document.getElementById("t-days").textContent  = pad2(Math.floor(diff/86400000));
+      document.getElementById("t-hours").textContent = pad2(Math.floor((diff%86400000)/3600000));
+      document.getElementById("t-mins").textContent  = pad2(Math.floor((diff%3600000)/60000));
+      document.getElementById("t-secs").textContent  = pad2(Math.floor((diff%60000)/1000));
+
+      document.getElementById("timerProgressBar").style.width = pct+"%";
+      document.getElementById("timerProgressPct").textContent = pct+"%";
+      document.getElementById("timerStartDate").textContent = formatDate(RAMADAN_START);
+      document.getElementById("timerEndDate").textContent   = formatDate(RAMADAN_END);
+      document.getElementById("timerToday").textContent     = formatDate(now);
+    }
+
+    applyUI();
+    renderCards();
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
